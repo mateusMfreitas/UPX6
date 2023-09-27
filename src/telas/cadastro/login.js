@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
+import UsuarioNavigator from '../../navegacao/UsuarioNavigator';
 
 export default function Login({ navigation }) {
   
@@ -15,7 +16,14 @@ export default function Login({ navigation }) {
     try {
       const credenciais = await signInWithEmailAndPassword(auth, username, password);
       const user = credenciais.user;
-      navigation.navigate('BottomNavigator');
+      const q = query(collection(db, "admins"), where("usuario", "==", username));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot.docs);
+      if (!querySnapshot.empty) {
+        navigation.navigate('BottomNavigator');
+      }else{
+        navigation.navigate('UsuarioNavigator');
+      }
     }catch (error) {
       alert("Erro ao fazer login: " + error.message);
     }
