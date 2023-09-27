@@ -12,8 +12,7 @@ export default function Cadastro({ navigation }) {
   const criarUsuario = async () => {
     try {
       const auth = getAuth();
-  
-  const credenciais = await createUserWithEmailAndPassword(auth, username, password);
+      const credenciais = await createUserWithEmailAndPassword(auth, username, password);
       Alert.alert('Sucesso', `Usuário ${credenciais.user.email} criado com sucesso!`);
     } catch (error) {
       Alert.alert('Erro', 'Erro ao criar usuário: ' + error.message);

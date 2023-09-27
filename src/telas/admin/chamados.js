@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import InserirProduto from '../../componentes/inserirProduto'; 
-import ListarProdutos from '../../componentes/listarProdutos';
+import InserirChamado from '../../componentes/inserirChamado'; 
+import ListarChamados from '../../componentes/listarChamados';
 import Item from '../../componentes/item';
 
-export default function Produtos({ navigation }) {
+export default function Chamados({ navigation }) {
     const [showForm, setShowForm] = useState(false);
-    const [products, setProducts] = useState([]);
-    const [atualizarProdutos, setAtualizarProdutos] = useState(false);
+    const [chamados, setChamados] = useState([]);
+    const [atualizarChamados, setAtualizarChamados] = useState(false);
     const [carregando, setCarregando] = useState(true);
 
 
     useEffect(() => {
-      const fetchProducts = async () => {
+      const recuperarChamados = async () => {
           try {
-              const produtos = await ListarProdutos();
-              setProducts(produtos);
+              const chamados = await ListarChamados();
+              setChamados(chamados);
               setCarregando(false);
 
           } catch (error) {
-              console.error("Erro ao obter produtos: ", error);
+              console.error("Erro ao obter chamados: ", error);
           }
       };
 
-      fetchProducts();
-  },  [atualizarProdutos]);
+      recuperarChamados();
+  },  [atualizarChamados]);
     const fecharFormulario = () => {
         setShowForm(false);
-        setAtualizarProdutos(prev => !prev);
+        setAtualizarChamados(prev => !prev);
     };
     return (
         <View style={styles.container}>
@@ -35,15 +35,15 @@ export default function Produtos({ navigation }) {
           <ActivityIndicator size='large' color='black'/>
           :
           <FlatList 
-            data={products}
+            data={chamados}
             keyExtractor={item => item.id}
             renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
           />
           }
           {!showForm ? (
-            <Button title="Inserir Produto" onPress={() => setShowForm(true)} />
+            <Button title="Inserir Chamado" onPress={() => setShowForm(true)} />
           ) : (
-            <InserirProduto fecharFormulario={fecharFormulario} />
+            <InserirChamado fecharFormulario={fecharFormulario} />
           )}
 
         </View>

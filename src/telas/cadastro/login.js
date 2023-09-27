@@ -1,9 +1,25 @@
 import {SafeAreaView, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import React, { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from '../../../firebaseConfig';
 
 export default function Login({ navigation }) {
+  
   const [username, setUsername] = useState('');  
   const [password, setPassword] = useState('');
+
+  async function handleLogin(){
+    
+    const auth = getAuth();
+    try {
+      const credenciais = await signInWithEmailAndPassword(auth, username, password);
+      const user = credenciais.user;
+      navigation.navigate('BottomNavigator');
+    }catch (error) {
+      alert("Erro ao fazer login: " + error.message);
+    }
+  }
 
   return (
       <SafeAreaView style={styles.container}>
@@ -22,7 +38,7 @@ export default function Login({ navigation }) {
           />
           <Button
             title="Login"
-            onPress={() => navigation.navigate('BottomNavigator') }
+            onPress={handleLogin}
           />
           <Button
             title="Cadastro"

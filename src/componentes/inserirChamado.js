@@ -3,37 +3,39 @@ import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { addDoc, collection } from "firebase/firestore"; 
 import { db } from '../../firebaseConfig';
 
-export default function InserirProduto({ fecharFormulario }) {
+export default function InserirChamado({ fecharFormulario }) {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
-    const [preco, setPreco] = useState('');
-    const [quantidade, setQuantidade] = useState('');
+    const [dataAdicionado, setDataAdicionado] = useState('');
+    const [responsavel, setResponsavel] = useState('');
+    const [status, setStatus] = useState('');
 
-    const handleInsertProduct = async () => {
-        if (!nome || !descricao || !preco || !quantidade) {
+
+    const chamadoInserido = async () => {
+        if (!nome || !descricao) {
             Alert.alert("Atenção", "Por favor, preencha todos os campos!");
             return;
         }
 
         try {
-            await addDoc(collection(db, "produtos"), {
+            await addDoc(collection(db, "chamados"), {
                 nome: nome,
                 descricao: descricao,
-                preco: parseFloat(preco),
-                estoque: parseInt(quantidade, 10)
+                dataAdicionado: new Date().toISOString(),
+                status: 'pendente',
+                responsavel: null
+
             });
-            Alert.alert("Sucesso", "Produto adicionado com sucesso!");
+            Alert.alert("Sucesso", "Chamado adicionado com sucesso!");
 
             setNome('');
             setDescricao('');
-            setPreco('');
-            setQuantidade('');
 
             if (fecharFormulario) fecharFormulario();
 
         } catch (error) {
-            console.error("Erro ao adicionar produto:", error);
-            Alert.alert("Erro", "Erro ao adicionar produto.");
+            console.error("Erro ao adicionar chamado:", error);
+            Alert.alert("Erro", "Erro ao adicionar chamado.");
         }
     };
 
@@ -53,21 +55,7 @@ export default function InserirProduto({ fecharFormulario }) {
                 onChangeText={setDescricao}
                 style={styles.input}
             />
-            <TextInput
-                placeholder="Preço"
-                value={preco}
-                onChangeText={setPreco}
-                style={styles.input}
-                keyboardType="numeric"
-            />
-            <TextInput
-                placeholder="Quantidade"
-                value={quantidade}
-                onChangeText={setQuantidade}
-                style={styles.input}
-                keyboardType="numeric"
-            />
-            <Button title="Salvar Produto" onPress={handleInsertProduct} />
+            <Button title="Salvar Chamado" onPress={chamadoInserido} />
         </View>
     );
 }
