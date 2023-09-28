@@ -35,7 +35,7 @@ export default function Login({ navigation }) {
               style={styles.input}
               onChangeText={setUsername}
               value={username}
-              placeholder="Usuário"
+              placeholder="E-Mail"
           />
           <TextInput
               style={styles.input}
