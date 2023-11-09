@@ -16,9 +16,9 @@ export default function Login({ navigation }) {
     try {
       const credenciais = await signInWithEmailAndPassword(auth, username, password);
       const user = credenciais.user;
-      const q = query(collection(db, "admins"), where("usuario", "==", username));
+      const q = query(collection(db, "admins"), where("email", "==", username));
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot.docs);
+
       if (!querySnapshot.empty) {
         navigation.navigate('BottomNavigator');
       }else{
