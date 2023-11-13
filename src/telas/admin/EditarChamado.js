@@ -1,15 +1,25 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> origin/master
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { getAuth } from "firebase/auth";
 import {  doc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
+<<<<<<< HEAD
 import InserirComentario from '../../componentes/inserirComentario';
 export default function EditarChamado({ navigation, route }) {
+=======
+
+export default function EditarChamado({ navigation, route  }) {
+>>>>>>> origin/master
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     const [responsavel, setResponsavel] = useState('');
     const [status, setStatus] = useState('');
     const [refresh, setRefresh] = useState(false);
+<<<<<<< HEAD
     const [showForm, setShowForm] = useState(false);
 
 
@@ -40,6 +50,38 @@ export default function EditarChamado({ navigation, route }) {
             Alert.alert("Sucesso", "Chamado finalizado com sucesso!");
         } catch (error) {
             Alert.alert("Erro", "Erro ao finalizar chamado.");
+=======
+
+    const { item } = route.params;
+
+    const forceUpdate = () => {
+        setRefresh(currentState => !currentState);
+      };
+
+    const handleEditarChamado = async () => {
+        if (!nome || !descricao || !responsavel || !status) {
+            Alert.alert("Atenção", "Por favor, preencha todos os campos!");
+            return;
+        }
+
+        try {
+            const docRef = db.collection('chamados').doc(item.id);
+            docRef.update({
+                nome: nome,
+                descricao: descricao,
+                responsavel: responsavel ,
+                status: status
+            });
+            Alert.alert("Sucesso", "Chamado editado com sucesso!");
+
+            setNome('');
+            setDescricao('');
+            setResponsavel('');
+            setStatus('');
+
+        } catch (error) {
+            Alert.alert("Erro", "Erro ao atualizar produto.");
+>>>>>>> origin/master
         }
     };
     const handleAlterarResponsavel = async () => {
@@ -53,6 +95,10 @@ export default function EditarChamado({ navigation, route }) {
             if (!querySnapshot.empty) {
                 const data = querySnapshot.docs.map(doc => doc.data());
                 const usuarioValue = data[0].usuario;
+<<<<<<< HEAD
+=======
+                console.log(usuarioValue);
+>>>>>>> origin/master
                 const itemRef = doc(db, "chamados", item.id);
               updateDoc(itemRef, {
                 responsavel: usuarioValue
@@ -76,6 +122,7 @@ export default function EditarChamado({ navigation, route }) {
     return( 
     <View>
         <Text>Título</Text>
+<<<<<<< HEAD
         <Text style = {styles.input}>{item.nome}</Text>
         <Text>Descrição</Text>
         <Text style = {styles.input}>{item.descricao}</Text>
@@ -91,6 +138,37 @@ export default function EditarChamado({ navigation, route }) {
             <InserirComentario fecharFormulario={fecharFormulario} id={item.id} />
           )}
 
+=======
+        <TextInput
+                placeholder={item.nome}
+                value={nome}
+                onChangeText={setNome}
+                style={styles.input}
+        />
+        <Text>Descrição</Text>
+            <TextInput
+            placeholder={item.descricao}
+            value={descricao}
+            onChangeText={setDescricao}
+            style={styles.input}
+        />
+        <Text>Responsável</Text>
+        <TextInput
+            placeholder={item.responsavel}
+            value={responsavel}
+            onChangeText={setResponsavel}
+            style={styles.input}
+        />
+        <Text>Status</Text>
+        <TextInput
+            placeholder={item.status}
+            value={status}
+            onChangeText={setStatus}
+            style={styles.input}
+        />
+            <Button title="Adicionar aos meus chamados" onPress={handleAlterarResponsavel}></Button>
+            <Button title="Salvar Alterações" onPress={handleEditarChamado}></Button>
+>>>>>>> origin/master
     </View>
     );
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import InserirChamado from '../../componentes/inserirChamado'; 
 import ListarChamados from '../../componentes/listarChamados';
-import ListarChamadosAtivos from '../../componentes/listarChamadosAtivos';
 import Item from '../../componentes/item';
 
 export default function Chamados({ navigation }) {
@@ -11,24 +10,13 @@ export default function Chamados({ navigation }) {
     const [atualizarChamados, setAtualizarChamados] = useState(false);
     const [carregando, setCarregando] = useState(true);
 
-    const recuperarChamados2 = async () => {
-      try {
-        setCarregando(true);
 
-          const chamados = await ListarChamadosAtivos();
-          setChamados(chamados);
-          setCarregando(false);
-      } catch (error) {
-          console.error("Erro ao obter chamados: ", error);
-      }
-  };
     useEffect(() => {
       const recuperarChamados = async () => {
           try {
-              const chamados = await ListarChamadosAtivos();
+              const chamados = await ListarChamados();
               setChamados(chamados);
               setCarregando(false);
-              console.log(chamados);
 
           } catch (error) {
               console.error("Erro ao obter chamados: ", error);
@@ -43,7 +31,6 @@ export default function Chamados({ navigation }) {
     };
     return (
         <View style={styles.container}>
-          <Button title="atualizar" onPress={recuperarChamados2}/>
           {carregando ? 
           <ActivityIndicator size='large' color='black'/>
           :
@@ -58,7 +45,6 @@ export default function Chamados({ navigation }) {
           ) : (
             <InserirChamado fecharFormulario={fecharFormulario} />
           )}
-          <Button title="ver Chamados Finalizados"/>
 
         </View>
     );
