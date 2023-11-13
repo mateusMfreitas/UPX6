@@ -14,7 +14,6 @@ async function getMeusChamados(){
   querySnapshot.forEach((doc) => {
     chamados.push(doc.data());
   });
-  console.log(chamados);
 }
 
 const renderItem = ({ item }) => (

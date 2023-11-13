@@ -1,45 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { getAuth } from "firebase/auth";
 import {  doc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
-
-export default function EditarChamado({ navigation, route  }) {
+import InserirComentario from '../../componentes/inserirComentario';
+export default function EditarChamado({ navigation, route }) {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     const [responsavel, setResponsavel] = useState('');
     const [status, setStatus] = useState('');
     const [refresh, setRefresh] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+
 
     const { item } = route.params;
-
+    const fecharFormulario = () => {
+      setShowForm(false);
+  };
     const forceUpdate = () => {
         setRefresh(currentState => !currentState);
       };
-
-    const handleEditarChamado = async () => {
-        if (!nome || !descricao || !responsavel || !status) {
-            Alert.alert("Atenção", "Por favor, preencha todos os campos!");
-            return;
-        }
-
+      const handleAdicionarComentario = async () => {
         try {
-            const docRef = db.collection('chamados').doc(item.id);
-            docRef.update({
-                nome: nome,
-                descricao: descricao,
-                responsavel: responsavel ,
-                status: status
-            });
-            Alert.alert("Sucesso", "Chamado editado com sucesso!");
-
-            setNome('');
-            setDescricao('');
-            setResponsavel('');
-            setStatus('');
-
+          const itemRef = doc(db, "chamados", item.id);
+          updateDoc(itemRef, {
+            status: 'finalizado'
+          });
+            Alert.alert("Sucesso", "Chamado finalizado com sucesso!");
         } catch (error) {
-            Alert.alert("Erro", "Erro ao atualizar produto.");
+            Alert.alert("Erro", "Erro ao finalizar chamado.");
+        }
+    };
+    const handleFecharChamado = async () => {
+        try {
+          const itemRef = doc(db, "chamados", item.id);
+          updateDoc(itemRef, {
+            status: 'finalizado'
+          });
+            Alert.alert("Sucesso", "Chamado finalizado com sucesso!");
+        } catch (error) {
+            Alert.alert("Erro", "Erro ao finalizar chamado.");
         }
     };
     const handleAlterarResponsavel = async () => {
@@ -53,7 +53,6 @@ export default function EditarChamado({ navigation, route  }) {
             if (!querySnapshot.empty) {
                 const data = querySnapshot.docs.map(doc => doc.data());
                 const usuarioValue = data[0].usuario;
-                console.log(usuarioValue);
                 const itemRef = doc(db, "chamados", item.id);
               updateDoc(itemRef, {
                 responsavel: usuarioValue
@@ -77,35 +76,21 @@ export default function EditarChamado({ navigation, route  }) {
     return( 
     <View>
         <Text>Título</Text>
-        <TextInput
-                placeholder={item.nome}
-                value={nome}
-                onChangeText={setNome}
-                style={styles.input}
-        />
+        <Text style = {styles.input}>{item.nome}</Text>
         <Text>Descrição</Text>
-            <TextInput
-            placeholder={item.descricao}
-            value={descricao}
-            onChangeText={setDescricao}
-            style={styles.input}
-        />
+        <Text style = {styles.input}>{item.descricao}</Text>
         <Text>Responsável</Text>
-        <TextInput
-            placeholder={item.responsavel}
-            value={responsavel}
-            onChangeText={setResponsavel}
-            style={styles.input}
-        />
+        <Text style = {styles.input}>{item.responsavel}</Text>
         <Text>Status</Text>
-        <TextInput
-            placeholder={item.status}
-            value={status}
-            onChangeText={setStatus}
-            style={styles.input}
-        />
+        <Text style = {styles.input}>{item.status}</Text>
             <Button title="Adicionar aos meus chamados" onPress={handleAlterarResponsavel}></Button>
-            <Button title="Salvar Alterações" onPress={handleEditarChamado}></Button>
+            <Button title="Finalizar Chamado" onPress={handleFecharChamado}></Button>
+            {!showForm ? (
+            <Button title="Adicionar comentário" onPress={() => setShowForm(true)} />
+          ) : (
+            <InserirComentario fecharFormulario={fecharFormulario} id={item.id} />
+          )}
+
     </View>
     );
 }

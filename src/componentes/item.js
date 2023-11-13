@@ -9,6 +9,7 @@ export default function Item({ item, navigation }) {
                 <Text style={styles.nomeChamado}>{item.nome}</Text>
                 <Text style={styles.descricaoChamado}>{item.descricao}</Text>
                 <Text style={styles.dataChamado}>{formatIsoDate(item.dataAdicionado)}</Text>
+                <Text style={styles.nomeChamado}>{item.responsavel}</Text>
                 <Text style={styles.statusChamado}>{item.status}</Text>
             </View>
         </TouchableOpacity>
