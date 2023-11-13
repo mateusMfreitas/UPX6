@@ -1,7 +1,7 @@
 import React from 'react';  
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
-import Udashboard from '../telas/Usuario/dashboard';
+import Udashboard from '../telas/usuario/dashboard';
 import Configuracoes from '../telas/usuario/Usuarioconfiguracoes';
 import ChamadosNavigator from './ChamadosNavigator';
 
