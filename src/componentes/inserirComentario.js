@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { addDoc, collection } from "firebase/firestore"; 
+import { doc, collection, getDoc, updateDoc } from "firebase/firestore"; 
 import { db } from '../../firebaseConfig';
 
-export default function InserirComentario({ fecharFormulario,id }) {
+export default function InserirComentario({ fecharFormulario,id, navigation, item }) {
     const [descricao, setDescricao] = useState('');
 
     const comentarioInserido = async () => {
@@ -13,14 +13,21 @@ export default function InserirComentario({ fecharFormulario,id }) {
         }
 
          try {
-            await addDoc(collection(db, "chamados"), {
-                descricao: descricao,
-                dataAdicionado: new Date().toISOString(),
-            });
+            const itemRef = doc(db, "chamados", id);
+            const docSnap = await getDoc(itemRef);
+            if (docSnap.exists) {
+                const comentariosAntigos = docSnap.data().comentarios || [];
+                const novosComentarios = [...comentariosAntigos, descricao];
+                updateDoc(itemRef, {
+                    comentarios: novosComentarios
+                  });
+            }
+            const docSnap2 = await getDoc(itemRef);
+            item = docSnap2.data();
             Alert.alert("Sucesso", "comentario adicionado com sucesso!");
 
             setDescricao('');
-
+            navigation.navigate('EditarChamado', { item: item });
             if (fecharFormulario) fecharFormulario();
 
         } catch (error) {
