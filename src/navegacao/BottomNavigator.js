@@ -13,7 +13,7 @@ export default function BottomNavigator({ navigation }) {
         <Tab.Screen name="Adashboard" component={Adashboard} />
         <Tab.Screen name="Chamados" component={ChamadosNavigator} />
         <Tab.Screen name="Graficos" component={Graficos} />
-        <Tab.Screen name="Configurações" component={Configuracoes} />
+        <Tab.Screen name="Configuracoes" component={Configuracoes} initialParams={{ atualizarTudo: true }} />
       </Tab.Navigator>
     );   
   }

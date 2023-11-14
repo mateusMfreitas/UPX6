@@ -6,12 +6,12 @@ import Configuracoes from '../telas/usuario/Usuarioconfiguracoes';
 import ChamadosNavigator from './ChamadosNavigator';
 
 export default function UsuarioNavigator({ navigation }) {
-  const Tab = createUsuarioTabNavigator();
+  const Tab = createBottomTabNavigator();
     return (
       <Tab.Navigator initialRouteName="Chamados">
         <Tab.Screen name="Chamados" component={ChamadosNavigator} />
         <Tab.Screen name="Udashboard" component={Udashboard} />
-        <Tab.Screen name="Configurações" component={Configuracoes} /> 
+        <Tab.Screen name="Configuracoes" component={Configuracoes} /> 
       </Tab.Navigator>
     );   
   }
