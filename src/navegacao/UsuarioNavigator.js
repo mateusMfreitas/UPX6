@@ -1,17 +1,18 @@
 import React from 'react';  
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
-import Udashboard from '../telas/usuario/dashboard';
 import Configuracoes from '../telas/usuario/Usuarioconfiguracoes';
-import ChamadosNavigator from './ChamadosNavigator';
+import Chamados from '../telas/usuario/chamados';
+import ChamadosFinalizados from '../telas/usuario/chamadosFinalizados';
 
 export default function UsuarioNavigator({ navigation }) {
   const Tab = createBottomTabNavigator();
+
     return (
-      <Tab.Navigator initialRouteName="Chamados">
-        <Tab.Screen name="Chamados" component={ChamadosNavigator} />
-        <Tab.Screen name="Udashboard" component={Udashboard} />
+      <Tab.Navigator initialRouteName="ListaChamados">
+        <Tab.Screen name="ListaChamados" component={Chamados} initialParams={{ atualizarTudo: true }} />
         <Tab.Screen name="Configuracoes" component={Configuracoes} /> 
+        <Tab.Screen name="ListaChamadosFinalizados" component={ChamadosFinalizados} initialParams={{ atualizarTudo: true }} />
       </Tab.Navigator>
     );   
   }

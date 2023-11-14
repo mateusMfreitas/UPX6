@@ -10,7 +10,7 @@ import { db } from '../../../firebaseConfig';
 
 
 
-export default function Chamados({ navigation, route }) {    
+export default function ChamadosFinalizados({ navigation, route }) {    
     const [showForm, setShowForm] = useState(false);
     const [chamados, setChamados] = useState([]);
     const [atualizarChamados, setAtualizarChamados] = useState(false);
@@ -19,11 +19,11 @@ export default function Chamados({ navigation, route }) {
     useEffect(() => {
       const recuperarChamados = async () => {
           try {
-              const chamados = await ListarChamadosAtivosUsuario();
+              const chamados = await ListarChamadosFinalizadosUsuario();
               setChamados(chamados);
               setCarregando(false);
               fecharFormulario();
-              navigation.navigate('ListaChamados', { atualizarTudo: false });
+              navigation.navigate('ListaChamadosFinalizados', { atualizarTudo: false });
           } catch (error) {
               console.error("Erro ao obter chamados: ", error);
           }
@@ -34,8 +34,27 @@ export default function Chamados({ navigation, route }) {
     const fecharFormulario = () => {
         setShowForm(false);
     };
-    const handleVerFinalizados = async () => {
-      navigation.navigate('ListaChamadosFinalizados', {atualizarTudo: true})
+
+    const ListarChamadosFinalizadosUsuario = async () => {
+      try {
+          const auth = getAuth();
+          const user = auth.currentUser;
+          const q = query(collection(db, 'chamados'), 
+          where('solicitante', '==', user.email),
+          where('status', '==', 'finalizado'));
+                  const chamadoSnapshot = await getDocs(q);
+          const listaChamados = chamadoSnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+          }));
+          return listaChamados;
+      } catch (error) {
+          console.error("Erro ao listar chamados: ", error);
+          throw error;
+      }
+  };
+    const handleVerPendentes = async () =>{
+        navigation.navigate('ListaChamados', {atualizarTudo: true});
     }
     return (
         <View style={styles.container}>
@@ -53,7 +72,7 @@ export default function Chamados({ navigation, route }) {
           ) : (
             <InserirChamado fecharFormulario={fecharFormulario} navigation={navigation} />
           )}
-          <Button title="ver Chamados Finalizados" onPress={handleVerFinalizados}/>
+          <Button title="ver Chamados Pendentes" onPress={handleVerPendentes}/>
 
         </View>
     );
