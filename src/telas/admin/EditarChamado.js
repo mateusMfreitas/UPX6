@@ -16,7 +16,9 @@ export default function EditarChamado({ navigation, route }) {
           updateDoc(itemRef, {
             status: 'finalizado'
           });
+          navigation.navigate('ListaChamados', { atualizarTudo: true });
             Alert.alert("Sucesso", "Chamado finalizado com sucesso!");
+            
         } catch (error) {
             Alert.alert("Erro", "Erro ao finalizar chamado.");
         }

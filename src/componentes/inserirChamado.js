@@ -3,13 +3,9 @@ import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { addDoc, collection } from "firebase/firestore"; 
 import { db } from '../../firebaseConfig';
 
-export default function InserirChamado({ fecharFormulario }) {
+export default function InserirChamado({ fecharFormulario, navigation }) {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
-    const [dataAdicionado, setDataAdicionado] = useState('');
-    const [responsavel, setResponsavel] = useState('');
-    const [status, setStatus] = useState('');
-
 
     const chamadoInserido = async () => {
         if (!nome || !descricao) {
@@ -30,9 +26,9 @@ export default function InserirChamado({ fecharFormulario }) {
 
             setNome('');
             setDescricao('');
+            navigation.navigate('ListaChamados', { atualizarTudo: true });
 
-            if (fecharFormulario) fecharFormulario();
-
+           // if (fecharFormulario) fecharFormulario();
         } catch (error) {
             console.error("Erro ao adicionar chamado:", error);
             Alert.alert("Erro", "Erro ao adicionar chamado.");

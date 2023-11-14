@@ -1,49 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import InserirChamado from '../../componentes/inserirChamado'; 
-import ListarChamados from '../../componentes/listarChamados';
 import ListarChamadosAtivos from '../../componentes/listarChamadosAtivos';
 import Item from '../../componentes/item';
 
-export default function Chamados({ navigation }) {
+export default function Chamados({ navigation, route }) {    
     const [showForm, setShowForm] = useState(false);
     const [chamados, setChamados] = useState([]);
     const [atualizarChamados, setAtualizarChamados] = useState(false);
     const [carregando, setCarregando] = useState(true);
 
-    const recuperarChamados2 = async () => {
-      try {
-        setCarregando(true);
-
-          const chamados = await ListarChamadosAtivos();
-          setChamados(chamados);
-          setCarregando(false);
-      } catch (error) {
-          console.error("Erro ao obter chamados: ", error);
-      }
-  };
     useEffect(() => {
+      console.log('atualizou');
       const recuperarChamados = async () => {
           try {
               const chamados = await ListarChamadosAtivos();
               setChamados(chamados);
               setCarregando(false);
-              console.log(chamados);
-
+              fecharFormulario();
+              navigation.navigate('ListaChamados', { atualizarTudo: false });
           } catch (error) {
               console.error("Erro ao obter chamados: ", error);
           }
       };
 
       recuperarChamados();
-  },  [atualizarChamados]);
+  },  [route.params?.atualizarTudo]);
     const fecharFormulario = () => {
         setShowForm(false);
-        setAtualizarChamados(prev => !prev);
     };
     return (
         <View style={styles.container}>
-          <Button title="atualizar" onPress={recuperarChamados2}/>
           {carregando ? 
           <ActivityIndicator size='large' color='black'/>
           :
@@ -56,7 +43,7 @@ export default function Chamados({ navigation }) {
           {!showForm ? (
             <Button title="Inserir Chamado" onPress={() => setShowForm(true)} />
           ) : (
-            <InserirChamado fecharFormulario={fecharFormulario} />
+            <InserirChamado fecharFormulario={fecharFormulario} navigation={navigation} />
           )}
           <Button title="ver Chamados Finalizados"/>
 
