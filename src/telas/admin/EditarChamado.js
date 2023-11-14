@@ -1,36 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, Alert } from 'react-native';
 import { getAuth } from "firebase/auth";
-import {  doc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {  doc, updateDoc, collection, query, where, getDocs, getDoc } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
 import InserirComentario from '../../componentes/inserirComentario';
 export default function EditarChamado({ navigation, route }) {
-    const [nome, setNome] = useState('');
-    const [descricao, setDescricao] = useState('');
-    const [responsavel, setResponsavel] = useState('');
-    const [status, setStatus] = useState('');
-    const [refresh, setRefresh] = useState(false);
     const [showForm, setShowForm] = useState(false);
-
-
     const { item } = route.params;
     const fecharFormulario = () => {
       setShowForm(false);
   };
-    const forceUpdate = () => {
-        setRefresh(currentState => !currentState);
-      };
-      const handleAdicionarComentario = async () => {
-        try {
-          const itemRef = doc(db, "chamados", item.id);
-          updateDoc(itemRef, {
-            status: 'finalizado'
-          });
-            Alert.alert("Sucesso", "Chamado finalizado com sucesso!");
-        } catch (error) {
-            Alert.alert("Erro", "Erro ao finalizar chamado.");
-        }
-    };
     const handleFecharChamado = async () => {
         try {
           const itemRef = doc(db, "chamados", item.id);
@@ -43,38 +22,45 @@ export default function EditarChamado({ navigation, route }) {
         }
     };
     const handleAlterarResponsavel = async () => {
-        auth = getAuth();
-        const user = auth.currentUser;
-        const uid = user.uid;
-        const usuariosRef = collection(db, "usuarios");
-        const q = query(usuariosRef, where("uid", "==", uid));
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user.uid;
+    
+    const usuariosRef = collection(db, "usuarios");
+    const q = query(usuariosRef, where("uid", "==", uid));
+    
+    const querySnapshot = await getDocs(q);
 
-        getDocs(q).then((querySnapshot) => {
-            if (!querySnapshot.empty) {
-                const data = querySnapshot.docs.map(doc => doc.data());
-                const usuarioValue = data[0].usuario;
-                const itemRef = doc(db, "chamados", item.id);
-              updateDoc(itemRef, {
-                responsavel: usuarioValue
-              })
-              .then(() => {
-                Alert.alert("Campo 'responsavel' atualizado com sucesso!");
-                forceUpdate();
-              })
-              .catch((error) => {
-                Alert.alert("Erro ao atualizar o documento:");
-              });
-          
-            } else {
-              Alert.alert("Não foi encontrado um usuário com o UID fornecido.");
-            }
-          }).catch((error) => {
-            Alert.alert("Erro ao obter o documento:");
-          });
+    if (!querySnapshot.empty) {
+      const usuarioValue = querySnapshot.docs[0].data().usuario;
+      const itemRef = doc(db, "chamados", item.id);
+
+      await updateDoc(itemRef, {
+        responsavel: usuarioValue
+      });
+
+      const docSnap = await getDoc(itemRef);
+
+      Alert.alert("Campo 'responsavel' atualizado com sucesso!");
+      navigation.navigate('EditarChamado', { item: docSnap.data() });
+    } else {
+      Alert.alert("Não foi encontrado um usuário com o UID fornecido.");
     }
+  } catch (error) {
+    Alert.alert("Erro ao executar operações:", error.message);
+  }
+};
+
+    const Item = ({ comentario }) => (
+      <View>
+        <Text>{comentario}</Text>
+      </View>
+    );
 
     return( 
     <View>
+
         <Text>Título</Text>
         <Text style = {styles.input}>{item.nome}</Text>
         <Text>Descrição</Text>
@@ -88,8 +74,13 @@ export default function EditarChamado({ navigation, route }) {
             {!showForm ? (
             <Button title="Adicionar comentário" onPress={() => setShowForm(true)} />
           ) : (
-            <InserirComentario fecharFormulario={fecharFormulario} id={item.id} />
+            <InserirComentario fecharFormulario={fecharFormulario} id={item.id} navigation={navigation} item={item} />
           )}
+         <FlatList
+          data={item.comentarios}
+          renderItem={({ item }) => <Item comentario={item} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
 
     </View>
     );
