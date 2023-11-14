@@ -1,8 +1,6 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 export default function ItemUsuario({ item, navigation }) {
-    const editarChamado = () => {
-        navigation.navigate('EditarChamado', { item: item });
-    };
+
     return (
         <View style={styles.productItem}>
             <Text style={styles.nomeChamado}>{item.nome}</Text>
