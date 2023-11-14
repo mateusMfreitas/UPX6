@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import InserirChamado from '../../componentes/inserirChamado'; 
 import ListarChamadosAtivosUsuario from '../../componentes/listarChamadosAtivosUsuario';
-import Item from '../../componentes/item';
-import ListarChamadosFinalizadosUsuario from '../../componentes/listarChamadosFinalizadosUsuario';
-import { getAuth } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from '../../../firebaseConfig';
+import ItemUsuario from '../../componentes/itemUsuario';
+
 
 
 
@@ -45,7 +42,7 @@ export default function Chamados({ navigation, route }) {
           <FlatList 
             data={chamados}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
+            renderItem={({ item }) => <ItemUsuario navigation={navigation} item={item}/>}
           />
           }
           {!showForm ? (
