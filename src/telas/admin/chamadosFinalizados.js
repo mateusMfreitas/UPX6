@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import ListarChamadosAtivos from '../../componentes/listarChamadosAtivos';
+import ListarChamadosFinalizados from '../../componentes/listarChamadosFinalizados';
 import Item from '../../componentes/item';
 
-export default function Chamados({ navigation, route }) {    
+export default function ChamadosFinalizados({ navigation, route }) {    
     const [showForm, setShowForm] = useState(false);
     const [chamados, setChamados] = useState([]);
     const [atualizarChamados, setAtualizarChamados] = useState(false);
@@ -12,11 +12,11 @@ export default function Chamados({ navigation, route }) {
     useEffect(() => {
       const recuperarChamados = async () => {
           try {
-              const chamados = await ListarChamadosAtivos();
+              const chamados = await ListarChamadosFinalizados();
               setChamados(chamados);
               setCarregando(false);
               fecharFormulario();
-              navigation.navigate('ListaChamados', { atualizarTudo: false });
+              navigation.navigate('ListaChamadosFinalizados', { atualizarTudo: false });
           } catch (error) {
               console.error("Erro ao obter chamados: ", error);
           }
@@ -27,9 +27,9 @@ export default function Chamados({ navigation, route }) {
     const fecharFormulario = () => {
         setShowForm(false);
     };
-    const handleVerFinalizados = async () => {
-      navigation.navigate('ListaChamadosFinalizados', {atualizarTudo: true})
-    }
+    const handleVerPendentes = async () => {
+        navigation.navigate('ListaChamados', {atualizarTudo: true})
+      }
     return (
         <View style={styles.container}>
           {carregando ? 
@@ -41,7 +41,7 @@ export default function Chamados({ navigation, route }) {
             renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
           />
           }
-          <Button title="ver Chamados Finalizados" onPress={handleVerFinalizados}/>
+          <Button title="ver Chamados Pendentes" onPress={handleVerPendentes}/>
 
         </View>
     );

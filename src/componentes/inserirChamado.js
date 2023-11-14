@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { addDoc, collection } from "firebase/firestore"; 
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, Picker, Text, Alert } from 'react-native';
+import { addDoc, collection, getDocs } from "firebase/firestore"; 
 import { db } from '../../firebaseConfig';
+import { getAuth } from "firebase/auth";
+
 
 export default function InserirChamado({ fecharFormulario, navigation }) {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
+    const [setores, setSetores] = useState([]);
+    const [selecionado, setSelecionado] = useState('');
 
     const chamadoInserido = async () => {
         if (!nome || !descricao) {
@@ -14,13 +18,15 @@ export default function InserirChamado({ fecharFormulario, navigation }) {
         }
 
         try {
+            const auth = getAuth();
+            const user = auth.currentUser;
             await addDoc(collection(db, "chamados"), {
                 nome: nome,
                 descricao: descricao,
                 dataAdicionado: new Date().toISOString(),
                 status: 'pendente',
-                responsavel: null
-
+                responsavel: null,
+                solicitante: user.email
             });
             Alert.alert("Sucesso", "Chamado adicionado com sucesso!");
 
@@ -28,12 +34,28 @@ export default function InserirChamado({ fecharFormulario, navigation }) {
             setDescricao('');
             navigation.navigate('ListaChamados', { atualizarTudo: true });
 
-           // if (fecharFormulario) fecharFormulario();
         } catch (error) {
             console.error("Erro ao adicionar chamado:", error);
             Alert.alert("Erro", "Erro ao adicionar chamado.");
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const querySnapshot = await getDocs(collection(db, 'setores'));
+            const dados = querySnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            setSetores(dados);
+          } catch (error) {
+            console.error('Erro ao buscar setores:', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
     return (
         <View style={styles.form}>
@@ -51,6 +73,9 @@ export default function InserirChamado({ fecharFormulario, navigation }) {
                 onChangeText={setDescricao}
                 style={styles.input}
             />
+            <Text>Selecione o setor do chamado:</Text>
+            
+            
             <Button title="Salvar Chamado" onPress={chamadoInserido} />
         </View>
     );
