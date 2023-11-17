@@ -5,7 +5,7 @@ export default function Item({ item, navigation }) {
     };
     return (
         <TouchableOpacity onPress={editarChamado}>
-            <View style={styles.productItem}>
+            <View style={styles.item}>
                 <Text style={styles.nomeChamado}>{item.nome}</Text>
                 <Text style={styles.descricaoChamado}>{item.descricao}</Text>
                 <Text style={styles.dataChamado}>{formatIsoDate(item.dataAdicionado)}</Text>
@@ -54,5 +54,14 @@ const styles = StyleSheet.create({
     statusChamado: {
         marginTop: 4,
         color: 'green',
-    }
+    },
+      item: {
+        backgroundColor: '#d3d3d3',
+        padding: 20,
+        marginVertical: 8,
+        marginHorizontal: 16,
+        borderWidth: 1,
+        borderColor: '#000', 
+        borderRadius: 5, 
+      }
 });

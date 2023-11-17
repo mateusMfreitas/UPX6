@@ -1,9 +1,10 @@
-import {SafeAreaView, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, TextInput, Button, Alert, TouchableOpacity, Text } from 'react-native';
 import React, { useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { db } from '../../../firebaseConfig';
 import { addDoc, collection } from "firebase/firestore"; 
+import { estilosComuns } from '../../estilo/estilosComuns';
 
 
 export default function Cadastro({ navigation }) {
@@ -16,13 +17,7 @@ export default function Cadastro({ navigation }) {
     try {
       const auth = getAuth();
       await createUserWithEmailAndPassword(auth, email, password).then((userCredential)=>{
-        Alert.alert('Sucesso', `Usuário ${username} criado com sucesso!`);
-        const docRef = addDoc(collection(db, "usuarios"), {
-          usuario: username,
-          uid: userCredential.user.uid,
-          admin: false,
-          email: email
-        });
+        Alert.alert('Sucesso', `Usuário ${email} criado com sucesso!`);
         navigation.navigate('Login');
       }).catch((error)=> {
         Alert.alert('Erro', 'Erro ao criar usuário: ' + error.message);
@@ -36,28 +31,21 @@ export default function Cadastro({ navigation }) {
   return (
       <SafeAreaView style={styles.container}>
           <TextInput
-              style={styles.input}
-              onChangeText={setUsername}
-              value={username}
-              placeholder="E-Usuário"
-          />
-          <TextInput
-              style={styles.input}
+              style={estilosComuns.input}
               onChangeText={setEmail}
               value={email}
               placeholder="E-Mail"
           />
           <TextInput
-              style={styles.input}
+              style={estilosComuns.input}
               onChangeText={setPassword}
               value={password}
               placeholder="Senha"
               secureTextEntry={true}  // Oculta o texto da senha
           />
-          <Button
-            title="Criar Usuário"
-            onPress={criarUsuario}
-          ></Button>
+          <TouchableOpacity style={estilosComuns.button}  onPress={criarUsuario}>
+            <Text style={estilosComuns.buttonText}>Criar Usuário</Text>
+          </TouchableOpacity>
       </SafeAreaView>
   );
 }

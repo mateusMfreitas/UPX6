@@ -1,9 +1,10 @@
-import {SafeAreaView, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import {SafeAreaView, StyleSheet, TextInput, Button, Alert, TouchableOpacity, Text, Image } from 'react-native';
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
-import UsuarioNavigator from '../../navegacao/UsuarioNavigator';
+import { estilosComuns } from '../../estilo/estilosComuns';
+
 
 export default function Login({ navigation }) {
   
@@ -31,43 +32,55 @@ export default function Login({ navigation }) {
 
   return (
       <SafeAreaView style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require('../../assets/7.jpg')}
+        />
           <TextInput
-              style={styles.input}
+              style={estilosComuns.input}
               onChangeText={setUsername}
               value={username}
               placeholder="E-Mail"
           />
           <TextInput
-              style={styles.input}
+              style={estilosComuns.input}
               onChangeText={setPassword}
               value={password}
               placeholder="Senha"
               secureTextEntry={true}
           />
-          <Button
-            title="Login"
-            onPress={handleLogin}
-          />
-          <Button
-            title="Cadastro"
-            onPress={() => navigation.navigate('Cadastro')}>
-          </Button>
+          <TouchableOpacity style={estilosComuns.button} onPress={handleLogin}>
+  <Text style={estilosComuns.buttonText}>Login</Text>
+</TouchableOpacity>
+
+<Text style={styles.signupText}>Ainda não tem uma conta? Cadastre-se</Text>
+
+
+<TouchableOpacity style={estilosComuns.button} onPress={() => navigation.navigate('Cadastro')}>
+  <Text style={estilosComuns.buttonText}>Cadastro</Text>
+</TouchableOpacity>
       </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,  
-    width: 200,
-    padding: 10,
-  },  
+
   container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+    flex: 1,
+    backgroundColor: '#f5f5f5', // Use a more neutral color
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20, // Add some padding
+  },
+
+  signupText: {
+    color: '#007BFF',
+    fontSize: 12, // Reduce the font size
+    marginBottom: 12,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+  }
 });

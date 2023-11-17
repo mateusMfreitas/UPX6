@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import ListarChamadosAtivos from '../../componentes/listarChamadosAtivos';
 import Item from '../../componentes/item';
 
@@ -32,26 +32,39 @@ export default function Chamados({ navigation, route }) {
     }
     return (
         <View style={styles.container}>
-          {carregando ? 
-          <ActivityIndicator size='large' color='black'/>
-          :
-          <FlatList 
-            data={chamados}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
-          />
-          }
-          <Button title="ver Chamados Finalizados" onPress={handleVerFinalizados}/>
-
+            {carregando ? 
+            <ActivityIndicator size='large' color='black'/>
+            :
+            <FlatList 
+                data={chamados}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
+            />
+            }
+            <TouchableOpacity style={styles.button} onPress={handleVerFinalizados}>
+                <Text style={styles.buttonText}>Chamados Finalizados</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
+      flex: 1,
+      backgroundColor: '#f5f5f5',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 20, 
+    },
+    button: {
+        width: 170, // Reduce the width
+        height: 40, // Reduce the height
         justifyContent: 'center',
-    }
-});
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: '#007BFF',
+        color: '#ffffff',
+        marginTop: 20,
+      }
+  });

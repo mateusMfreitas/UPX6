@@ -1,7 +1,10 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 export default function ItemUsuario({ item, navigation }) {
-
+    const verComentarios = () => {
+        navigation.navigate('ComentariosChamado', { item: item });
+    };
     return (
+        <TouchableOpacity onPress={verComentarios}>
         <View style={styles.productItem}>
             <Text style={styles.nomeChamado}>{item.nome}</Text>
             <Text style={styles.descricaoChamado}>{item.descricao}</Text>
@@ -9,6 +12,7 @@ export default function ItemUsuario({ item, navigation }) {
             <Text style={styles.nomeChamado}>{item.responsavel}</Text>
             <Text style={styles.statusChamado}>{item.status}</Text>
         </View>
+        </TouchableOpacity>
     );
 
 }

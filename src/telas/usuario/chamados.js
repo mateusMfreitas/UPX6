@@ -35,32 +35,44 @@ export default function Chamados({ navigation, route }) {
       navigation.navigate('ListaChamadosFinalizados', {atualizarTudo: true})
     }
     return (
-        <View style={styles.container}>
-          {carregando ? 
-          <ActivityIndicator size='large' color='black'/>
-          :
-          <FlatList 
-            data={chamados}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <ItemUsuario navigation={navigation} item={item}/>}
-          />
-          }
-          {!showForm ? (
-            <Button title="Inserir Chamado" onPress={() => setShowForm(true)} />
-          ) : (
-            <InserirChamado fecharFormulario={fecharFormulario} navigation={navigation} />
-          )}
-          <Button title="ver Chamados Finalizados" onPress={handleVerFinalizados}/>
+  <View style={styles.container}>
+    {carregando ? (
+      <ActivityIndicator size='large' color='black'/>
+    ) : (
+      <FlatList 
+        data={chamados}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <ItemUsuario navigation={navigation} item={item}/>}
+      />
+    )}
 
-        </View>
-    );
+    {!showForm ? (
+      <View style={styles.buttonContainer}>
+        <Button title="Inserir Chamado" onPress={() => setShowForm(true)}  style={styles.button} />
+        <Button title="Ver Chamados Finalizados" onPress={handleVerFinalizados}  style={styles.button}/>
+      </View>
+    ) : (
+      <InserirChamado fecharFormulario={fecharFormulario} navigation={navigation} />
+    )}
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+  },
+  button: {
+    backgroundColor: '#ffffff', 
+  },
 });

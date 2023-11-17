@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { getAuth } from "firebase/auth";
 import {  doc, updateDoc, collection, query, where, getDocs, getDoc } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
 import InserirComentario from '../../componentes/inserirComentario';
+import { estilosComuns } from '../../estilo/estilosComuns';
+
 export default function EditarChamado({ navigation, route }) {
     const [showForm, setShowForm] = useState(false);
     const { item } = route.params;
@@ -61,8 +63,7 @@ export default function EditarChamado({ navigation, route }) {
     );
 
     return( 
-    <View>
-
+      <View>
         <Text>Título</Text>
         <Text style = {styles.input}>{item.nome}</Text>
         <Text>Descrição</Text>
@@ -71,20 +72,25 @@ export default function EditarChamado({ navigation, route }) {
         <Text style = {styles.input}>{item.responsavel}</Text>
         <Text>Status</Text>
         <Text style = {styles.input}>{item.status}</Text>
-            <Button title="Adicionar aos meus chamados" onPress={handleAlterarResponsavel}></Button>
-            <Button title="Finalizar Chamado" onPress={handleFecharChamado}></Button>
-            {!showForm ? (
-            <Button title="Adicionar comentário" onPress={() => setShowForm(true)} />
-          ) : (
-            <InserirComentario fecharFormulario={fecharFormulario} id={item.id} navigation={navigation} item={item} />
-          )}
-         <FlatList
+        <TouchableOpacity style={estilosComuns.button} onPress={handleAlterarResponsavel}>
+          <Text style={estilosComuns.buttonText}>Adicionar aos meus chamados</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={estilosComuns.button} onPress={handleFecharChamado}>
+          <Text style={estilosComuns.buttonText}>Finalizar Chamado</Text>
+        </TouchableOpacity>
+        {!showForm ? (
+          <TouchableOpacity style={estilosComuns.button} onPress={() => setShowForm(true)}>
+            <Text style={estilosComuns.buttonText}>Adicionar comentário</Text>
+          </TouchableOpacity>
+        ) : (
+          <InserirComentario fecharFormulario={fecharFormulario} id={item.id} navigation={navigation} item={item} />
+        )}
+        <FlatList
           data={item.comentarios}
           renderItem={({ item }) => <Item comentario={item} />}
           keyExtractor={(item, index) => index.toString()}
         />
-
-    </View>
+      </View>
     );
 }
 const styles = StyleSheet.create({

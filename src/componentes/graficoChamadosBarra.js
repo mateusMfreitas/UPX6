@@ -45,7 +45,7 @@ export default function GraficoChamados({ navigation }) {
           }}
           xLabelsAngle={-45}
           width={Dimensions.get("window").width - 16}
-          height={180}
+          height={400}
           chartConfig={{
             fromZero: true,
             backgroundColor: "#e26a00",
@@ -57,6 +57,8 @@ export default function GraficoChamados({ navigation }) {
               borderRadius: 16
             }
           }}
+          startFromZero={true}
+          verticalLabelRotation={90} 
           style={{
             marginVertical: 8,
             borderRadius: 16

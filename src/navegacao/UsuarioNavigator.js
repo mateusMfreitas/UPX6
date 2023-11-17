@@ -3,15 +3,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet } from 'react-native';
 import Chamados from '../telas/usuario/chamados';
 import ChamadosFinalizados from '../telas/usuario/chamadosFinalizados';
+import { createStackNavigator } from '@react-navigation/stack';
+import ComentariosChamado from '../telas/cadastro/comentariosChamado';
+
 
 export default function UsuarioNavigator({ navigation }) {
   const Tab = createBottomTabNavigator();
+  const Stack = createStackNavigator();
 
     return (
-      <Tab.Navigator initialRouteName="ListaChamados">
-        <Tab.Screen name="ListaChamados" component={Chamados} initialParams={{ atualizarTudo: true }} />
-        <Tab.Screen name="ListaChamadosFinalizados" component={ChamadosFinalizados} initialParams={{ atualizarTudo: true }} />
-      </Tab.Navigator>
+
+      <Stack.Navigator initialRouteName="Chamados">
+        <Stack.Screen name="ListaChamados" component={Chamados} initialParams={{ atualizarTudo: true }} />
+        <Stack.Screen name="ListaChamadosFinalizados" component={ChamadosFinalizados} initialParams={{ atualizarTudo: true }} />
+        <Stack.Screen name="ComentariosChamado" component={ComentariosChamado} />
+      </Stack.Navigator>
     );   
   }
   

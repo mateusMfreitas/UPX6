@@ -13,7 +13,7 @@ function AppNavigator() {
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Cadastro" component={Cadastro} />
-      <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
+      <Stack.Screen name="BottomNavigator" component={BottomNavigator}   options={{ title: 'Sair' }} />
       <Stack.Screen name="UsuarioNavigator" component={UsuarioNavigator} />
     </Stack.Navigator>
   );
