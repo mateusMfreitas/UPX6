@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator,TouchableOpacity } from 'react-native';
 import InserirChamado from '../../componentes/inserirChamado'; 
 import ListarChamadosAtivosUsuario from '../../componentes/listarChamadosAtivosUsuario';
 import Item from '../../componentes/item';
@@ -58,22 +58,20 @@ export default function ChamadosFinalizados({ navigation, route }) {
     }
     return (
         <View style={styles.container}>
-          {carregando ? 
-          <ActivityIndicator size='large' color='black'/>
-          :
-          <FlatList 
-            data={chamados}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
-          />
-          }
-          {!showForm ? (
-            <Button title="Inserir Chamado" onPress={() => setShowForm(true)} />
-          ) : (
-            <InserirChamado fecharFormulario={fecharFormulario} navigation={navigation} />
-          )}
-          <Button title="ver Chamados Pendentes" onPress={handleVerPendentes}/>
-
+            {carregando ? 
+            <ActivityIndicator size='large' color='black'/>
+            :
+            <FlatList 
+                data={chamados}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
+            />
+            }
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={handleVerPendentes}>
+                    <Text style={styles.buttonText}>Pendentes</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -84,5 +82,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    button: {
+        flex: 1, 
+        backgroundColor: '#1e90ff', 
+        margin: 6,
+        padding: 10, 
+        borderRadius: 5,
+        alignItems: 'center', 
+        justifyContent: 'center', 
+      },
+      buttonText: {
+        color: 'white', 
+        fontWeight: 'bold', 
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 0,
+        backgroundColor: '#f0f0f0',
+        padding: 7, 
+        width: '100%'
+      }
 });

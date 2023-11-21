@@ -31,8 +31,8 @@ export default function InserirComentario({ fecharFormulario,id, navigation, ite
             if (fecharFormulario) fecharFormulario();
 
         } catch (error) {
-            console.error("Erro ao adicionar chamado:", error);
-            Alert.alert("Erro", "Erro ao adicionar chamado.");
+            console.error("Erro ao adicionar comentario:", error);
+            Alert.alert("Erro", "Erro ao adicionar comentario.");
         } 
     };
 

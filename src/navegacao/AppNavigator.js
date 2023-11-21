@@ -14,7 +14,7 @@ function AppNavigator() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Cadastro" component={Cadastro} />
       <Stack.Screen name="BottomNavigator" component={BottomNavigator}   options={{ title: 'Sair' }} />
-      <Stack.Screen name="UsuarioNavigator" component={UsuarioNavigator} />
+      <Stack.Screen name="UsuarioNavigator" component={UsuarioNavigator} options={{ title: 'Sair' }} />
     </Stack.Navigator>
   );
 }

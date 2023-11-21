@@ -50,7 +50,7 @@ export default function InserirChamado({ fecharFormulario, navigation }) {
             const querySnapshot = await getDocs(collection(db, 'setores'));
             const dados = querySnapshot.docs.map(doc => ({
                 label: doc.data().nome,
-                value: doc.data().nome, // ou doc.id, dependendo do que você quer usar como valor
+                value: doc.data().nome, 
                 id: doc.id,
               }));
             setSetores(dados);

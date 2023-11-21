@@ -14,9 +14,9 @@ export default function UsuarioNavigator({ navigation }) {
     return (
 
       <Stack.Navigator initialRouteName="Chamados">
-        <Stack.Screen name="ListaChamados" component={Chamados} initialParams={{ atualizarTudo: true }} />
-        <Stack.Screen name="ListaChamadosFinalizados" component={ChamadosFinalizados} initialParams={{ atualizarTudo: true }} />
-        <Stack.Screen name="ComentariosChamado" component={ComentariosChamado} />
+        <Stack.Screen name="ListaChamados" component={Chamados} initialParams={{ atualizarTudo: true }} options={{ headerShown: false }} />
+        <Stack.Screen name="ListaChamadosFinalizados" component={ChamadosFinalizados} initialParams={{ atualizarTudo: true }} options={{ headerShown: false }} />
+        <Stack.Screen name="ComentariosChamado" component={ComentariosChamado} options={{ title: 'Voltar' }}/>
       </Stack.Navigator>
     );   
   }
