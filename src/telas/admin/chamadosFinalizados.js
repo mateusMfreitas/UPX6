@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
       padding: 20, 
     },
     button: {
-        width: 170, // Reduce the width
-        height: 40, // Reduce the height
+        width: 170, 
+        height: 40, 
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList, TouchableOpacity } from 'react-native';
 import { db } from '../../../firebaseConfig';
 import { addDoc, collection, getDocs, deleteDoc, query, where, doc } from "firebase/firestore"; 
+import { estilosComuns } from '../../estilo/estilosComuns';
 
 export default function Configuracoes({ navigation, route }) {
   const [descricao, setDescricao] = useState('');
@@ -63,15 +64,18 @@ export default function Configuracoes({ navigation, route }) {
   }, [route.params?.atualizarTudo]);
 
   const Item = ({ nome }) => (
-    <View>
-      <Text>{nome}</Text>
-      <Button title="excluir" onPress={() => handleExcluirSetor(nome)}></Button>
+    <View style={styles.itemContainer}>
+      <Text style={styles.itemName}>{nome}</Text>
+      <TouchableOpacity style={estilosComuns.deleteButton} onPress={() => handleExcluirSetor(nome)}>
+        <Text style={estilosComuns.buttonText}>Excluir</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return( 
     <View>
-      <Text>Adicionar novo setor</Text>
+      <Text style={styles.title}>Adicionar novo setor</Text>
+
       <View style={styles.form}>
         <TextInput
           placeholder="Nome"
@@ -80,8 +84,10 @@ export default function Configuracoes({ navigation, route }) {
           style={styles.input}
         />
       </View>
-      <Button title="Adicionar" onPress={handleAdicionarSetor}></Button>
-      <Text>Setores disponíveis</Text>
+      <TouchableOpacity style={estilosComuns.button} onPress={handleAdicionarSetor}>
+        <Text style={estilosComuns.buttonText}>Adicionar</Text>
+      </TouchableOpacity>
+      <Text style={styles.title}>Setores disponíveis</Text>      
       <FlatList 
         data={setores}
         keyExtractor={(item, index) => index.toString()}
@@ -102,5 +108,21 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     marginBottom: 10,
     padding: 5
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  itemName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
   }
 });

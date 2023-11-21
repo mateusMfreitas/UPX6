@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-export default function Item({ item, navigation }) {
+export default function Item({ item, navigation, id }) {
     const editarChamado = () => {
-        navigation.navigate('EditarChamado', { item: item });
+        navigation.navigate('EditarChamado', { item: item, id:id });
     };
     return (
         <TouchableOpacity onPress={editarChamado}>
@@ -33,11 +33,6 @@ function formatIsoDate(isoString) {
 const formattedDate = formatIsoDate("2023-09-22T12:34:56.789Z");
 
 const styles = StyleSheet.create({
-    productItem: {
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-    },
     nomeChamado: {
         fontSize: 18,
         fontWeight: 'bold',

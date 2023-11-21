@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import { doc, collection, getDoc, updateDoc } from "firebase/firestore"; 
 import { db } from '../../firebaseConfig';
+import { estilosComuns } from '../estilo/estilosComuns';
 
 export default function InserirComentario({ fecharFormulario,id, navigation, item }) {
     const [descricao, setDescricao] = useState('');
@@ -31,21 +32,27 @@ export default function InserirComentario({ fecharFormulario,id, navigation, ite
             if (fecharFormulario) fecharFormulario();
 
         } catch (error) {
-            console.error("Erro ao adicionar chamado:", error);
-            Alert.alert("Erro", "Erro ao adicionar chamado.");
+            console.error("Erro ao adicionar comentario:", error);
+            Alert.alert("Erro", "Erro ao adicionar comentario.");
         } 
     };
 
     return (
-        <View style={styles.form}>
-            <Button title="Fechar" onPress={fecharFormulario} />
-            <TextInput
-                placeholder="Descrição"
-                value={descricao}
-                onChangeText={setDescricao}
-                style={styles.input}
-            />
-            <Button title="Salvar Comentario" onPress={comentarioInserido} />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.form}>
+                <TouchableOpacity onPress={fecharFormulario} style={estilosComuns.button}>
+                    <Text style={estilosComuns.buttonText}>Fechar</Text>
+                </TouchableOpacity>
+                <TextInput
+                    placeholder="Descrição"
+                    value={descricao}
+                    onChangeText={setDescricao}
+                    style={styles.input}
+                />
+                <TouchableOpacity onPress={comentarioInserido} style={estilosComuns.button}>
+                    <Text style={estilosComuns.buttonText}>Salvar Comentario</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }

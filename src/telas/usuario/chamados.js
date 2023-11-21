@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import InserirChamado from '../../componentes/inserirChamado'; 
 import ListarChamadosAtivosUsuario from '../../componentes/listarChamadosAtivosUsuario';
 import ItemUsuario from '../../componentes/itemUsuario';
-
-
+import Item from '../../componentes/item';
 
 
 export default function Chamados({ navigation, route }) {    
@@ -40,6 +39,7 @@ export default function Chamados({ navigation, route }) {
       <ActivityIndicator size='large' color='black'/>
     ) : (
       <FlatList 
+        style={{ width: '90%' }}
         data={chamados}
         keyExtractor={item => item.id}
         renderItem={({ item }) => <ItemUsuario navigation={navigation} item={item}/>}
@@ -48,9 +48,13 @@ export default function Chamados({ navigation, route }) {
 
     {!showForm ? (
       <View style={styles.buttonContainer}>
-        <Button title="Inserir Chamado" onPress={() => setShowForm(true)}  style={styles.button} />
-        <Button title="Ver Chamados Finalizados" onPress={handleVerFinalizados}  style={styles.button}/>
-      </View>
+        <TouchableOpacity style={styles.button} onPress={() => setShowForm(true)}>
+          <Text style={styles.buttonText}>Inserir Chamado</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleVerFinalizados}>
+          <Text style={styles.buttonText}>Finalizados</Text>
+        </TouchableOpacity>
+    </View>
     ) : (
       <InserirChamado fecharFormulario={fecharFormulario} navigation={navigation} />
     )}
@@ -64,15 +68,54 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+},
+  form: {
+      width: '80%',
+      alignItems: 'center'
+  },
+  input: {
+      width: '100%',
+      borderBottomWidth: 1,
+      borderColor: 'gray',
+      marginBottom: 10,
+      padding: 5
+  },
+  item: {
+    backgroundColor: '#ADD8E6',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderWidth: 1, 
+    borderColor: '#000', 
+    borderRadius: 5, 
+  },
+  label: {
+    fontWeight: 'bold',
+  },container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    flex: 1, 
+    backgroundColor: '#1e90ff', 
+    margin: 6,
+    padding: 10, 
+    borderRadius: 5,
+    alignItems: 'center', 
+    justifyContent: 'center', 
+  },
+  buttonText: {
+    color: 'white', 
+    fontWeight: 'bold', 
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 10,
+    marginTop: 0,
     backgroundColor: '#f0f0f0',
-    padding: 10,
-  },
-  button: {
-    backgroundColor: '#ffffff', 
-  },
+    padding: 7, 
+    width: '100%'
+  }
 });

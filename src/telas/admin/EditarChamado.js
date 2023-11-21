@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, Alert, TouchableOpacity,ScrollView } from 'react-native';
 import { getAuth } from "firebase/auth";
 import {  doc, updateDoc, collection, query, where, getDocs, getDoc } from "firebase/firestore";
 import { db } from '../../../firebaseConfig';
@@ -9,12 +9,13 @@ import { estilosComuns } from '../../estilo/estilosComuns';
 export default function EditarChamado({ navigation, route }) {
     const [showForm, setShowForm] = useState(false);
     const { item } = route.params;
+    const { id } = route.params;
     const fecharFormulario = () => {
       setShowForm(false);
   };
     const handleFecharChamado = async () => {
         try {
-          const itemRef = doc(db, "chamados", item.id);
+          const itemRef = doc(db, "chamados", id);
           updateDoc(itemRef, {
             status: 'finalizado'
           });
@@ -56,40 +57,43 @@ export default function EditarChamado({ navigation, route }) {
   }
 };
 
-    const Item = ({ comentario }) => (
-      <View>
+    const Item = ({ comentario, style }) => (
+      <View style={style}>
         <Text>{comentario}</Text>
       </View>
     );
 
     return( 
       <View>
-        <Text>Título</Text>
+        <ScrollView>
+        <Text style={styles.label}>Título</Text>
         <Text style = {styles.input}>{item.nome}</Text>
-        <Text>Descrição</Text>
+        <Text style={styles.label}>Descrição</Text>
         <Text style = {styles.input}>{item.descricao}</Text>
-        <Text>Responsável</Text>
+        <Text style={styles.label}>Responsável</Text>
         <Text style = {styles.input}>{item.responsavel}</Text>
-        <Text>Status</Text>
+        <Text style={styles.label}>Status</Text>
         <Text style = {styles.input}>{item.status}</Text>
         <TouchableOpacity style={estilosComuns.button} onPress={handleAlterarResponsavel}>
-          <Text style={estilosComuns.buttonText}>Adicionar aos meus chamados</Text>
+          <Text style={estilosComuns.buttonText}>Add aos meus chamados</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={estilosComuns.button} onPress={handleFecharChamado}>
-          <Text style={estilosComuns.buttonText}>Finalizar Chamado</Text>
+        <TouchableOpacity style={estilosComuns.closeButton} onPress={handleFecharChamado}>
+          <Text style={estilosComuns.buttonText}>Fechar Chamado</Text>
         </TouchableOpacity>
+        
+        <FlatList
+          data={item.comentarios}
+          renderItem={({ item }) => <Item style={styles.item} comentario={item} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
         {!showForm ? (
           <TouchableOpacity style={estilosComuns.button} onPress={() => setShowForm(true)}>
-            <Text style={estilosComuns.buttonText}>Adicionar comentário</Text>
+            <Text style={estilosComuns.buttonText}>Comentar</Text>
           </TouchableOpacity>
         ) : (
           <InserirComentario fecharFormulario={fecharFormulario} id={item.id} navigation={navigation} item={item} />
         )}
-        <FlatList
-          data={item.comentarios}
-          renderItem={({ item }) => <Item comentario={item} />}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        </ScrollView>
       </View>
     );
 }
@@ -104,5 +108,17 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         marginBottom: 10,
         padding: 5
+    },
+    item: {
+      backgroundColor: '#ADD8E6',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+      borderWidth: 1, 
+      borderColor: '#000', 
+      borderRadius: 5, 
+    },
+    label: {
+      fontWeight: 'bold',
     }
 });

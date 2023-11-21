@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from '../../firebaseConfig';
 import { Dimensions } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
+import * as FileSystem from 'expo-file-system';
+import XLSX from 'xlsx';
+import * as Sharing from 'expo-sharing';
+import { encode as btoa } from 'base-64';
 
 export default function GraficoChamadosResolvidos({ navigation }) {
 
@@ -35,11 +39,36 @@ export default function GraficoChamadosResolvidos({ navigation }) {
     const statusLabels = Object.keys(data);
     const chamadosCounts = Object.values(data);
 
+    const exportToExcel = async () => {
+      const dataToExport = statusLabels.map((status, index) => ({
+        Status: status,
+        Chamados: chamadosCounts[index],
+      }));
+      const ws = XLSX.utils.json_to_sheet(dataToExport);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    
+      const wbout = XLSX.write(wb, {type:'binary', bookType:"xlsx"});
+      const base64 = btoa(wbout);
+      const uri = FileSystem.documentDirectory + 'data.xlsx';
+      await FileSystem.writeAsStringAsync(uri, base64, { encoding: FileSystem.EncodingType.Base64 });
+      if (!(await Sharing.isAvailableAsync())) {
+        alert(`Uh oh, sharing isn't available on your platform`);
+        return;
+      }
+      Sharing.shareAsync(uri);
+    };
+
     return (
       <View>
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginVertical: 10 }}>
-              Chamados Resolvidos
-        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold', marginVertical: 10 }}>
+            Chamados Resolvidos
+          </Text>
+          <TouchableOpacity onPress={exportToExcel} style={{ backgroundColor: '#ddd', padding: 10, borderRadius: 5 }}>
+            <Text style={{ color: 'blue' }}>Exportar</Text>
+          </TouchableOpacity>
+        </View>
         <BarChart
           data={{
             labels: statusLabels,

@@ -38,7 +38,7 @@ export default function Chamados({ navigation, route }) {
             <FlatList 
                 data={chamados}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
+                renderItem={({ item }) => <Item navigation={navigation} item={item} id={item.id}/>}
             />
             }
             <TouchableOpacity style={styles.button} onPress={handleVerFinalizados}>
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
       padding: 20, 
     },
     button: {
-        width: 170, // Reduce the width
-        height: 40, // Reduce the height
+        width: 170,
+        height: 40,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
