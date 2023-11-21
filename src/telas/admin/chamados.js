@@ -38,7 +38,7 @@ export default function Chamados({ navigation, route }) {
             <FlatList 
                 data={chamados}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => <Item navigation={navigation} item={item}/>}
+                renderItem={({ item }) => <Item navigation={navigation} item={item} id={item.id}/>}
             />
             }
             <TouchableOpacity style={styles.button} onPress={handleVerFinalizados}>

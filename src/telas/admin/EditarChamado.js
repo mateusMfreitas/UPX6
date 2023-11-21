@@ -9,12 +9,13 @@ import { estilosComuns } from '../../estilo/estilosComuns';
 export default function EditarChamado({ navigation, route }) {
     const [showForm, setShowForm] = useState(false);
     const { item } = route.params;
+    const { id } = route.params;
     const fecharFormulario = () => {
       setShowForm(false);
   };
     const handleFecharChamado = async () => {
         try {
-          const itemRef = doc(db, "chamados", item.id);
+          const itemRef = doc(db, "chamados", id);
           updateDoc(itemRef, {
             status: 'finalizado'
           });
