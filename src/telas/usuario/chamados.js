@@ -3,6 +3,8 @@ import { Text, View, Button, StyleSheet, FlatList, ActivityIndicator, TouchableO
 import InserirChamado from '../../componentes/inserirChamado'; 
 import ListarChamadosAtivosUsuario from '../../componentes/listarChamadosAtivosUsuario';
 import ItemUsuario from '../../componentes/itemUsuario';
+import Item from '../../componentes/item';
+
 
 export default function Chamados({ navigation, route }) {    
     const [showForm, setShowForm] = useState(false);
@@ -37,9 +39,10 @@ export default function Chamados({ navigation, route }) {
       <ActivityIndicator size='large' color='black'/>
     ) : (
       <FlatList 
+        style={{ width: '90%' }}
         data={chamados}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <ItemUsuario style={styles.item} navigation={navigation} item={item}/>}
+        renderItem={({ item }) => <ItemUsuario navigation={navigation} item={item}/>}
       />
     )}
 
@@ -60,6 +63,12 @@ export default function Chamados({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+},
   form: {
       width: '80%',
       alignItems: 'center'
